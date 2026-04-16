@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.mk.farmereats.ui.screens.login.LoginScreen
 import com.mk.farmereats.ui.screens.onboarding.OnboardingScreen
+import com.mk.farmereats.ui.screens.register.RegisterScreen
 
 @Composable
 fun AppNavHost(isLoggedIn: Boolean){
@@ -30,10 +32,22 @@ fun AppNavHost(isLoggedIn: Boolean){
         }
 
         composable("login"){
-
+            LoginScreen(
+                onCreateAccountClick = {
+                    navController.navigate("register"){
+                        popUpTo("login"){ inclusive = true}
+                    }
+                }
+            )
         }
         composable("register"){
-
+            RegisterScreen(
+                goBackToLogin = {
+                    navController.navigate("login"){
+                        popUpTo("register") { inclusive = true }
+                    }
+                }
+            )
         }
         composable("main"){
 

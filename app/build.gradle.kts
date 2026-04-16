@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
 
+    alias(libs.plugins.kotlin.parcelize)
+
 }
 
 android {
@@ -80,5 +82,8 @@ dependencies {
 
 //    navigation
     implementation(libs.androidx.navigation.compose)
+
+//  for serialized name
+    implementation("com.google.code.gson:gson:2.10.1")
 
 }

@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -83,7 +84,7 @@ fun OnboardingScreen(
             ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.weight(0.1f))
 
             Image(
                 painter = painterResource(id = item.image),
@@ -93,7 +94,7 @@ fun OnboardingScreen(
                     .weight(1f)
             )
 
-            Spacer(modifier = Modifier.height(33.dp))
+            Spacer(modifier = Modifier.weight(0.1f))
 
             Card(
                 shape = RoundedCornerShape(30.dp),
@@ -165,7 +166,10 @@ fun OnboardingScreen(
                         text = "Login",
                         textDecoration = TextDecoration.Underline,
                         color = Color.DarkGray,
-                        fontSize = 16.sp
+                        fontSize = 16.sp,
+                        modifier = Modifier.clickable{
+                            onLoginClick()
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
