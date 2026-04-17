@@ -58,7 +58,7 @@ The app is built following modern Android development practices with a focus on 
 ## 🔐 Authentication Screens
 
 | Login | Step 1 – User Details | Step 2 – Business Info |
-|-------|----------------------|----------------------|
+|----------|----------|----------|
 | ![Login](screenshots/login.png) | ![Step1](screenshots/step1.png) | ![Step2](screenshots/step2.png) |
 
 ---
@@ -67,7 +67,7 @@ The app is built following modern Android development practices with a focus on 
 ## 📄 Verification & Other Screens
 
 | Step 3 – Upload Proof |Step 4 – Business Hours | Success |
-|----------------------| ------------------------| --------|
+|----------|----------|----------|
 | ![Step3](screenshots/step3.png) |![Step4](screenshots/step4.png) | ![Success](screenshots/success.png) |
 
 ---
