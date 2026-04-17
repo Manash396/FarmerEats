@@ -37,4 +37,14 @@ object AppConstants {
         "Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu",
         "Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"
     )
+
+    val days = listOf("M", "T", "W", "Th", "F", "S", "Su")
+
+    val timeSlots = listOf(
+        "8:00am - 10:00am",
+        "10:00am - 1:00pm",
+        "1:00pm - 4:00pm",
+        "4:00pm - 7:00pm",
+        "7:00pm - 10:00pm"
+    )
 }

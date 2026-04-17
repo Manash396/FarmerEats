@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mk.farmereats.ui.screens.login.LoginScreen
 import com.mk.farmereats.ui.screens.onboarding.OnboardingScreen
+import com.mk.farmereats.ui.screens.onboarding.RegisterCompletedScreen
 import com.mk.farmereats.ui.screens.register.RegisterScreen
 
 @Composable
@@ -15,7 +16,7 @@ fun AppNavHost(isLoggedIn: Boolean){
 
     NavHost(
         navController = navController,
-        startDestination = if (isLoggedIn) "main" else "register"
+        startDestination = if (isLoggedIn) "main" else "onboarding"
     ){
         composable("onboarding"){
             OnboardingScreen(onLoginClick = {
@@ -51,6 +52,11 @@ fun AppNavHost(isLoggedIn: Boolean){
         }
         composable("main"){
 
+        }
+        composable("registerCompleted"){
+            RegisterCompletedScreen(
+
+            )
         }
     }
 }

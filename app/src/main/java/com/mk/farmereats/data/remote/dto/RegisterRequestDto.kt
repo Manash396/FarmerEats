@@ -1,5 +1,6 @@
 package com.mk.farmereats.data.remote.dto
 
+import android.net.Uri
 import android.os.Parcelable
 import com.mk.farmereats.domain.model.RegisterRequest
 
@@ -40,7 +41,7 @@ data class RegisterRequestDto(
     val zipCode: Int = 0,
 
     @com.google.gson.annotations.SerializedName("registration_proof")
-    val registrationProof: String  = "",
+    val registrationProof: Uri? = null,
 
     @com.google.gson.annotations.SerializedName("business_hours")
     val businessHours: BusinessHoursDto = BusinessHoursDto(),
@@ -83,27 +84,27 @@ data class RegisterRequestDto(
     ) : Parcelable
 
 }
-
-fun RegisterRequestDto.toDomain() : RegisterRequest {
-    return RegisterRequest(
-        fullName = fullName,
-        email = email,
-        phone = phone,
-        password = password,
-        role = role,
-        businessName = businessName,
-        informalName = informalName,
-        address = address,
-        city = city,
-        state = state,
-        zipCode = zipCode.toString(),
-        registrationProof = registrationProof,
-        businessHours = businessHours.toDomain(),
-        deviceToken = deviceToken,
-        type = type,
-        socialId = socialId
-    )
-}
+//
+//fun RegisterRequestDto.toDomain() : RegisterRequest {
+//    return RegisterRequest(
+//        fullName = fullName,
+//        email = email,
+//        phone = phone,
+//        password = password,
+//        role = role,
+//        businessName = businessName,
+//        informalName = informalName,
+//        address = address,
+//        city = city,
+//        state = state,
+//        zipCode = zipCode.toString(),
+//        registrationProof = registrationProof,
+//        businessHours = businessHours.toDomain(),
+//        deviceToken = deviceToken,
+//        type = type,
+//        socialId = socialId
+//    )
+//}
 
 fun RegisterRequestDto.BusinessHoursDto.toDomain() : RegisterRequest.BusinessHours {
     return RegisterRequest.BusinessHours(

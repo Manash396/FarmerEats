@@ -104,6 +104,7 @@ fun LoginScreen(
 
             OutlinedTextField(
                 isError = emailError,
+                singleLine = true,
                 value = email,
                 onValueChange = { email = it },
                 placeholder = { Text("Email Address", color = Color.Gray) },
@@ -131,6 +132,7 @@ fun LoginScreen(
             OutlinedTextField(
                 isError = passwordError,
                 value = password,
+                singleLine = true,
                 onValueChange = { password = it },
                 placeholder = { Text("Password", color = Color.Gray) },
                 leadingIcon = {

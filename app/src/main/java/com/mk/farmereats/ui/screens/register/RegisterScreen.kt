@@ -53,7 +53,7 @@ fun RegisterScreen(
     onSubmit: () -> Unit = {}
 ) {
 
-    var currentStep by remember { mutableIntStateOf(2) }
+    var currentStep by remember { mutableIntStateOf(1) }
 
     var  registerObjState by remember { mutableStateOf(RegisterRequest() ) }
 
@@ -101,10 +101,20 @@ fun RegisterScreen(
                 )
             }
             3 -> {
-
+                StepThreeScreen(
+                    registerState = registerObjState,
+                    goBack = { currentStep-- } ,
+                    onContinue = { currentStep++ },
+                    onValueChange = {registerObjState = it}
+                )
             }
             4 -> {
-
+                StepFourScreen(
+                    registerState = registerObjState,
+                    goBack = { currentStep-- } ,
+                    onSubmit = {  },
+                    onValueChange = {registerObjState = it}
+                )
             }
         }
 
@@ -156,7 +166,6 @@ fun StepOneScreen(
     Column(
         modifier = Modifier.fillMaxWidth()
             .navigationBarsPadding()
-            .imePadding()
             .padding(bottom = 10.dp)
     ) {
 
@@ -202,6 +211,7 @@ fun StepOneScreen(
                 OutlinedTextField(
                     isError = fullNameError,
                     value = registerState.fullName,
+                    singleLine = true,
                     onValueChange = {
                         onValueChange(registerState.copy(fullName = it))
                                     },
@@ -231,6 +241,7 @@ fun StepOneScreen(
                 OutlinedTextField(
                     isError = emailError,
                     value = registerState.email,
+                    singleLine = true,
                     onValueChange = {
                         onValueChange(registerState.copy(email = it))
                                     },
@@ -260,6 +271,7 @@ fun StepOneScreen(
                 OutlinedTextField(
                     isError = phoneError,
                     value = registerState.phone,
+                    singleLine = true,
                     onValueChange = {
                         onValueChange( registerState.copy(phone = it) )
                                     },
@@ -289,6 +301,7 @@ fun StepOneScreen(
                 OutlinedTextField(
                     isError = passwordError,
                     value = registerState.password,
+                    singleLine = true,
                     onValueChange = {
                         onValueChange(registerState.copy(password = it))
                                     },
@@ -318,6 +331,7 @@ fun StepOneScreen(
                 OutlinedTextField(
                     isError = confirmPassError,
                     value = confirmPass,
+                    singleLine = true,
                     onValueChange = { confirmPass = it },
                     placeholder = { Text("Re-enter Password", color = Color.Gray) },
                     leadingIcon = {

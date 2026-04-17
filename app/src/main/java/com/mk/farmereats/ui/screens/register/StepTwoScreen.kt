@@ -108,6 +108,7 @@ fun StepTwoScreen(
                 OutlinedTextField(
                     isError = businessError,
                     value = registerState.businessName,
+                    singleLine = true,
                     onValueChange = {
                         onValueChange(registerState.copy(businessName = it))
                     },
@@ -137,6 +138,7 @@ fun StepTwoScreen(
                 OutlinedTextField(
                     isError = informalNameError,
                     value = registerState.informalName,
+                    singleLine = true,
                     onValueChange = {
                         onValueChange(registerState.copy(informalName = it))
                     },
@@ -166,6 +168,7 @@ fun StepTwoScreen(
                 OutlinedTextField(
                     isError = streetAddressError,
                     value = registerState.address,
+                    singleLine = true,
                     onValueChange = {
                         onValueChange(registerState.copy(address = it))
                     },
@@ -195,6 +198,7 @@ fun StepTwoScreen(
                 OutlinedTextField(
                     isError = cityError,
                     value = registerState.city,
+                    singleLine = true,
                     onValueChange = {
                         onValueChange(registerState.copy(city = it))
                     },
@@ -239,6 +243,7 @@ fun StepTwoScreen(
                             ),
                             value = registerState.state,
                             onValueChange = {},
+                            singleLine = true,
                             readOnly = true,
                             placeholder = { Text("State", color = Color.Gray) },
                             trailingIcon = {
@@ -309,54 +314,56 @@ fun StepTwoScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(34.dp))
+//            Spacer(modifier = Modifier.height(34.dp))
 
-            Row(
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Icon(
+                painter = painterResource(R.drawable.back_arrow_icon),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
+                    .clickable {
+                        goBack()
+                    }
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+                onClick = {
+
+                    with(registerState) {
+                        businessError = businessName.isEmpty()
+                        informalNameError = informalName.isEmpty()
+                        streetAddressError = address.isEmpty()
+                        cityError = city.isEmpty()
+                        zipCodeError = zipCode.isEmpty()
+                        stateError = state.isEmpty()
+                    }
+
+                    val hasError = businessError || informalNameError || streetAddressError
+                            || cityError || zipCodeError || stateError
+                    hasEmptyField = hasError
+
+                if (!hasError) onContinue()
+
+                },
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = orangeColor
+                ),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .width(200.dp)
+                    .height(55.dp)
             ) {
-
-                Icon(
-                    painter = painterResource(R.drawable.back_arrow_icon),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                        .clickable {
-                            goBack()
-                        }
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Button(
-                    onClick = {
-
-                        with(registerState) {
-                            businessError = businessName.isEmpty()
-                            informalNameError = informalName.isEmpty()
-                            streetAddressError = address.isEmpty()
-                            cityError = city.isEmpty()
-                            zipCodeError = zipCode.isEmpty()
-                            stateError = state.isEmpty()
-                        }
-
-                        val hasError = businessError || informalNameError || streetAddressError
-                                || cityError || zipCodeError || stateError
-                        hasEmptyField = hasError
-//                if (!hasError)
-
-                    },
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = orangeColor
-                    ),
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(55.dp)
-                ) {
-                    Text("Continue", fontSize = 16.sp)
-                }
+                Text("Continue", fontSize = 16.sp)
             }
         }
     }
