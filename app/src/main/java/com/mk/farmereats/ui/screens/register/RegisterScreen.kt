@@ -9,12 +9,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -38,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mk.farmereats.R
+import com.mk.farmereats.domain.model.RegisterRequest
 import com.mk.farmereats.ui.components.SocialButton
 import com.mk.farmereats.ui.theme.orangeColor
 import com.mk.farmereats.ui.theme.textContainerColor
@@ -49,7 +53,9 @@ fun RegisterScreen(
     onSubmit: () -> Unit = {}
 ) {
 
-    var currentStep by remember { mutableIntStateOf(1) }
+    var currentStep by remember { mutableIntStateOf(2) }
+
+    var  registerObjState by remember { mutableStateOf(RegisterRequest() ) }
 
 
     Column(
@@ -79,10 +85,20 @@ fun RegisterScreen(
 
         when(currentStep){
             1 -> {
-                StepOneScreen(goBackToLogin = goBackToLogin , onContinue = { currentStep++ })
+                StepOneScreen(
+                    registerState = registerObjState,
+                    goBackToLogin = goBackToLogin ,
+                    onContinue = { currentStep++ },
+                    onValueChange = {registerObjState = it}
+                )
             }
             2 -> {
-
+                StepTwoScreen(
+                    registerState = registerObjState,
+                    goBack = { currentStep-- } ,
+                    onContinue = { currentStep++ },
+                    onValueChange = {registerObjState = it}
+                )
             }
             3 -> {
 
@@ -110,14 +126,13 @@ fun RegisterScreenPreview(){
 
 @Composable
 fun StepOneScreen(
+    registerState : RegisterRequest,
     goBackToLogin: () -> Unit = {},
-    onContinue : () -> Unit = {}
+    onContinue : () -> Unit = {},
+    onValueChange: (RegisterRequest) -> Unit
 ){
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var fullName by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
+
     var confirmPass by remember { mutableStateOf("") }
 
     var emailError by remember { mutableStateOf(false) }
@@ -126,15 +141,22 @@ fun StepOneScreen(
     var phoneError by remember { mutableStateOf(false) }
     var confirmPassError by remember { mutableStateOf(false) }
 
-    LaunchedEffect(emailError , passwordError) {
+    var hasEmptyField by remember { mutableStateOf(false) }
+
+    LaunchedEffect(hasEmptyField) {
         delay(2000)
         emailError = false
         passwordError = false
+        fullNameError = false
+        phoneError = false
+        confirmPassError = false
+        hasEmptyField = false
     }
 
     Column(
         modifier = Modifier.fillMaxWidth()
             .navigationBarsPadding()
+            .imePadding()
             .padding(bottom = 10.dp)
     ) {
 
@@ -179,8 +201,10 @@ fun StepOneScreen(
 
                 OutlinedTextField(
                     isError = fullNameError,
-                    value = fullName,
-                    onValueChange = { fullName = it },
+                    value = registerState.fullName,
+                    onValueChange = {
+                        onValueChange(registerState.copy(fullName = it))
+                                    },
                     placeholder = { Text("Full Name", color = Color.Gray) },
                     leadingIcon = {
                         Icon(
@@ -206,8 +230,10 @@ fun StepOneScreen(
 
                 OutlinedTextField(
                     isError = emailError,
-                    value = email,
-                    onValueChange = { email = it },
+                    value = registerState.email,
+                    onValueChange = {
+                        onValueChange(registerState.copy(email = it))
+                                    },
                     placeholder = { Text("Email Address", color = Color.Gray) },
                     leadingIcon = {
                         Icon(
@@ -233,8 +259,10 @@ fun StepOneScreen(
 
                 OutlinedTextField(
                     isError = phoneError,
-                    value = phone,
-                    onValueChange = { phone = it },
+                    value = registerState.phone,
+                    onValueChange = {
+                        onValueChange( registerState.copy(phone = it) )
+                                    },
                     placeholder = { Text("Phone Number", color = Color.Gray) },
                     leadingIcon = {
                         Icon(
@@ -260,8 +288,10 @@ fun StepOneScreen(
 
                 OutlinedTextField(
                     isError = passwordError,
-                    value = password,
-                    onValueChange = { password = it },
+                    value = registerState.password,
+                    onValueChange = {
+                        onValueChange(registerState.copy(password = it))
+                                    },
                     placeholder = { Text("Password", color = Color.Gray) },
                     leadingIcon = {
                         Icon(
@@ -335,11 +365,19 @@ fun StepOneScreen(
             Button(
                 onClick = {
 
-                    emailError = email.isEmpty()
-                    passwordError = password.isEmpty()
-                    val hasError = emailError || passwordError
+                    with(registerState){
+                        emailError = email.isEmpty()
+                        passwordError = password.isEmpty()
+                        fullNameError = fullName.isEmpty()
+                        phoneError =  phone.isEmpty()
+                    }
+                    confirmPassError =  confirmPass.isEmpty()
 
-//                if (!hasError)
+                    val hasError = emailError || passwordError || confirmPassError
+                            || fullNameError || phoneError
+
+                if (!hasError) onContinue()
+                    else hasEmptyField = true
 
                 },
                 shape = RoundedCornerShape(50),

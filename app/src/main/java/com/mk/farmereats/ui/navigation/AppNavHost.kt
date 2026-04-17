@@ -15,7 +15,7 @@ fun AppNavHost(isLoggedIn: Boolean){
 
     NavHost(
         navController = navController,
-        startDestination = if (isLoggedIn) "main" else "onboarding"
+        startDestination = if (isLoggedIn) "main" else "register"
     ){
         composable("onboarding"){
             OnboardingScreen(onLoginClick = {

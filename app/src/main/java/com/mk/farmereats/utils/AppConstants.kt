@@ -29,4 +29,12 @@ object AppConstants {
             bgColor = Color(0xFFF2CC8F)
         )
     )
+
+    val IndianStates =  listOf(
+        "Assam","Arunachal Pradesh","Bihar","Chhattisgarh","Goa","Gujarat",
+        "Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala",
+        "Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram",
+        "Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu",
+        "Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"
+    )
 }
