@@ -2,26 +2,26 @@ package com.mk.farmereats.utils
 
 import androidx.compose.ui.graphics.Color
 import com.mk.farmereats.R
-import com.mk.farmereats.domain.model.OnboardingItem
+import com.mk.farmereats.ui.screens.onboarding.OnboardingUiState
 
 object AppConstants {
 
     val onboardingItems = listOf(
-        OnboardingItem(
+        OnboardingUiState(
             image = R.drawable.ic_farm,
             title = "Quality",
             description = "Sell your farm fresh products directly to consumers, cutting" +
                     "out the middle man and reducing emissions of the global supply.",
             bgColor = Color(0xFF6FBF73)
         ),
-        OnboardingItem(
+        OnboardingUiState(
             image = R.drawable.ic_delivery,
             title = "Convenient",
             description = "Our team of delivery drivers will make sure your orders are picked up on time " +
                     "promptly delivered to your customers.",
             bgColor = Color(0xFFE07A5F)
         ),
-        OnboardingItem(
+        OnboardingUiState(
             image = R.drawable.ic_local,
             title = "Local",
             description = "We love the earth and know you do too! Join us in reducing our local chain" +
@@ -47,4 +47,6 @@ object AppConstants {
         "4:00pm - 7:00pm",
         "7:00pm - 10:00pm"
     )
+
+    const val BASE_URL = "sowlab.com/assignment/"
 }

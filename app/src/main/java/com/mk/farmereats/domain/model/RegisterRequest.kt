@@ -1,7 +1,15 @@
 package com.mk.farmereats.domain.model
 
+import android.content.Context
 import android.net.Uri
 import com.mk.farmereats.data.remote.dto.RegisterRequestDto
+import com.mk.farmereats.ui.screens.register.getFileName
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 data class RegisterRequest(
     val fullName: String = "",
@@ -32,11 +40,50 @@ data class RegisterRequest(
     )
 }
 
+fun RegisterRequest.toMultipart(
+    context: Context
+): Pair<Map<String, RequestBody>, MultipartBody.Part?> {
 
+    val map = mutableMapOf<String, RequestBody>()
 
+    fun String.toBody() =
+        this.toRequestBody("text/plain".toMediaTypeOrNull())
 
+    map["full_name"] = fullName.toBody()
+    map["email"] = email.toBody()
+    map["phone"] = phone.toBody()
+    map["password"] = password.toBody()
 
+    val filePart = registrationProof?.let { uri ->
+        val file = uriToFile(context, uri)
 
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+        MultipartBody.Part.createFormData(
+            "registration_proof",
+            file.name,
+            requestFile
+        )
+    }
+
+    return Pair(map, filePart)
+}
+
+fun uriToFile(context: Context, uri: Uri): File {
+    val contentResolver = context.contentResolver
+
+    val fileName = getFileName(context, uri) ?: "temp_file"
+
+    val file = File(context.cacheDir, fileName)
+
+    contentResolver.openInputStream(uri)?.use { inputStream ->
+        file.outputStream().use { outputStream ->
+            inputStream.copyTo(outputStream)
+        }
+    }
+
+    return file
+}
 
 
 //fun RegisterRequest.toDto(): RegisterRequestDto {
