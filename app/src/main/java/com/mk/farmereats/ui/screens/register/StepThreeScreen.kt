@@ -74,7 +74,7 @@ fun StepThreeScreen(
 
     var attachedError by remember { mutableStateOf(false) }
 
-    var selectedPdfUri by remember { mutableStateOf<Uri?>(null) }
+    var selectedPdfUri by remember { mutableStateOf<Uri?>(registerState.registrationProof) }
     var selectedFileName by remember { mutableStateOf("") }
 
     val pdfPicker  = rememberLauncherForActivityResult(
@@ -87,6 +87,10 @@ fun StepThreeScreen(
 
             selectedFileName = getFileName(context , it)
         }
+    }
+
+    LaunchedEffect(selectedPdfUri) {
+        selectedPdfUri?.let { selectedFileName = getFileName(context , it) }
     }
 
     LaunchedEffect(attachedError) {

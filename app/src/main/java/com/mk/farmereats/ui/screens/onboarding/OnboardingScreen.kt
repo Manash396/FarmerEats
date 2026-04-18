@@ -137,7 +137,9 @@ fun OnboardingScreen(
                             containerColor = bgColor,
                             contentColor = Color.White
                         ),
-                        onClick = {},
+                        onClick = {
+                            onJoinClick()
+                        },
                         shape = RoundedCornerShape(50),
                     ) {
                         Text(

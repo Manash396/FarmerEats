@@ -31,8 +31,11 @@ class AuthRepositoryImp @Inject constructor(
 
             val raw = response.body()?.string()
 
+            Log.d("Mkdev:",raw ?: "")
+
             if (response.isSuccessful && raw != null) {
-                val obj = Gson().fromJson(raw, RegisterResponse::class.java)
+                val cleanJson  = extractJson(raw)
+                val obj = Gson().fromJson(cleanJson, RegisterResponse::class.java)
 
                     if (obj.success){
                         Result.success(obj.token ?: "")
@@ -45,7 +48,7 @@ class AuthRepositoryImp @Inject constructor(
             }
 
         } catch (e: Exception) {
-            Log.d("Mkdev", "here in exception${e.message}")
+            Log.d("Mkdev", "here in exception ${e.message}")
             Result.failure(e)
         }
     }
@@ -57,9 +60,11 @@ class AuthRepositoryImp @Inject constructor(
 
             val raw = response.body()?.string()
 
+            Log.d("Mkdev:",raw ?: "")
 
             if (response.isSuccessful && raw != null) {
-                val obj = Gson().fromJson(raw, LoginResponse::class.java)
+                val cleanJson  = extractJson(raw)
+                val obj = Gson().fromJson(cleanJson, LoginResponse::class.java)
 
                 if (obj.success){
                     Result.success(obj.token ?: "")
@@ -76,4 +81,9 @@ class AuthRepositoryImp @Inject constructor(
         }
     }
 
+}
+
+fun extractJson(raw: String): String {
+    val index = raw.indexOf("{")
+    return if (index != -1) raw.substring(index) else raw
 }
