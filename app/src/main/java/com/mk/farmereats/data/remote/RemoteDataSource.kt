@@ -1,8 +1,10 @@
 package com.mk.farmereats.data.remote
 
 import com.mk.farmereats.data.remote.api.ApiService
+import com.mk.farmereats.domain.model.RegisterResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Multipart
 import javax.inject.Inject
@@ -13,7 +15,7 @@ class RemoteDataSource @Inject constructor(
     suspend fun register(
         data : Map<String , RequestBody> ,
         file :  MultipartBody.Part?
-    ): Response<Unit> {
+    ): Response<ResponseBody> {
         return api.registerUser(data, file)
     }
 

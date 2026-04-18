@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mk.farmereats.domain.model.RegisterRequest
 import com.mk.farmereats.domain.repository.AuthRepository
+import com.mk.farmereats.utils.DataStoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository ,
+    private val dataStore: DataStoreManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RegisterUiState())
@@ -40,9 +42,14 @@ class RegisterViewModel @Inject constructor(
 
             _state.update {
                 if (result.isSuccess) {
+
+                    val token = result.getOrNull()
+                    token?.let {  dataStore.saveToken(it) }
+
                     it.copy(
                         isLoading = false,
-                        isSuccess = true
+                        isSuccess = true,
+                        token = token
                     )
                 } else {
                     it.copy(

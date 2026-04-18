@@ -5,6 +5,6 @@ import com.mk.farmereats.domain.model.RegisterRequest
 
 interface AuthRepository {
 
-    suspend fun register(context: Context, request: RegisterRequest): Result<Unit>
+    suspend fun register(context: Context, request: RegisterRequest): Result<String>
 
 }

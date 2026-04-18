@@ -60,7 +60,11 @@ fun AppNavHost(isLoggedIn: Boolean){
         }
         composable("registerCompleted"){
             RegisterCompletedScreen(
-
+                onDone = {
+                    navController.navigate("login"){
+                        popUpTo("registerCompleted") { inclusive = true }
+                    }
+                }
             )
         }
     }

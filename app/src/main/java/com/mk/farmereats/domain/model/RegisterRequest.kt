@@ -26,7 +26,7 @@ data class RegisterRequest(
     val businessHours: BusinessHours = BusinessHours(),
     val deviceToken: String = "",
     val type: String = "email",
-    val socialId: String = ""
+    val socialId: String = "0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx"
 ){
     data class BusinessHours(
         val mon: List<String> = emptyList(),
@@ -52,6 +52,19 @@ fun RegisterRequest.toMultipart(
     map["email"] = email.toBody()
     map["phone"] = phone.toBody()
     map["password"] = password.toBody()
+
+    map["role"] = role.toBody()
+    map["business_name"] = businessName.toBody()
+    map["informal_name"] = informalName.toBody()
+    map["address"] = address.toBody()
+    map["city"] = city.toBody()
+    map["state"] = state.toBody()
+    map["zip_code"] = zipCode.toBody()
+    map["device_token"] = deviceToken.toBody()
+    map["type"] = type.toBody()
+
+
+    map["social_id"] = socialId.toBody()
 
     val filePart = registrationProof?.let { uri ->
         val file = uriToFile(context, uri)

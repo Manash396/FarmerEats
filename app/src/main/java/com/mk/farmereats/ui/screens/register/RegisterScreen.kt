@@ -1,5 +1,6 @@
 package com.mk.farmereats.ui.screens.register
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -71,6 +72,11 @@ fun RegisterScreen(
 
     LaunchedEffect(uiState.value.isSuccess) {
         if (uiState.value.isSuccess){
+
+            uiState.value.token?.let { s ->
+                Log.d("Mkdev",s)
+            }
+
             onSubmit()
         }
     }
@@ -332,7 +338,7 @@ fun StepOneScreen(
                     value = registerState.phone,
                     singleLine = true,
                     onValueChange = {
-                        onValueChange( registerState.copy(phone = it) )
+                        if(it.length<=10) onValueChange( registerState.copy(phone = it) )
                                     },
                     placeholder = { Text("Phone Number", color = Color.Gray) },
                     leadingIcon = {

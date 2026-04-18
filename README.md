@@ -75,6 +75,8 @@ The app is built following modern Android development practices with a focus on 
 
 ## Demo 
 
+<img src="screenshots/demo.gif" alt="FarmerEats Demo" width="320" height="auto" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+
 
 ## 🔥 Key Implementations
 

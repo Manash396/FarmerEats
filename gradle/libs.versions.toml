@@ -16,6 +16,8 @@ ksp = "2.0.21-1.0.28"
 hilt = "2.57.2"
 foundationLayout = "1.10.6"
 material3 = "1.4.0"
+datastoreCore = "1.2.1"
+datastorePreferencesCore = "1.2.1"
 
 
 [libraries]
@@ -42,6 +44,9 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+
+androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastoreCore" }
+androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastorePreferencesCore" }
 
 
 [plugins]
