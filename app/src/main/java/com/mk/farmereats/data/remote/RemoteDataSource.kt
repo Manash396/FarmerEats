@@ -14,9 +14,16 @@ class RemoteDataSource @Inject constructor(
 ) {
     suspend fun register(
         data : Map<String , RequestBody> ,
+        socialId : RequestBody,
         file :  MultipartBody.Part?
     ): Response<ResponseBody> {
-        return api.registerUser(data, file)
+        return api.registerUser(data, socialId, file)
+    }
+
+    suspend fun login(
+        data :  Map<String , RequestBody>
+    ) : Response<ResponseBody> {
+        return api.login(data)
     }
 
 

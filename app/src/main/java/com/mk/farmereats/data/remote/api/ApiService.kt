@@ -17,6 +17,13 @@ interface ApiService {
     @POST("user/register")
     suspend fun registerUser(
         @PartMap data: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part("social_id") socialId : RequestBody,
         @Part registrationProof: MultipartBody.Part?
+    ): Response<ResponseBody>
+
+    @Multipart
+    @POST("user/login")
+    suspend fun login(
+        @PartMap data : Map<String , @JvmSuppressWildcards RequestBody>
     ): Response<ResponseBody>
 }

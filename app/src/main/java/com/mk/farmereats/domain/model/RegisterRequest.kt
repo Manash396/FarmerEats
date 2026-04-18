@@ -64,7 +64,7 @@ fun RegisterRequest.toMultipart(
     map["type"] = type.toBody()
 
 
-    map["social_id"] = socialId.toBody()
+//    map["social_id"] = socialId.toBody()
 
     val filePart = registrationProof?.let { uri ->
         val file = uriToFile(context, uri)

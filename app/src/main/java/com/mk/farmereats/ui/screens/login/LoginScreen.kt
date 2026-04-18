@@ -3,6 +3,7 @@ package com.mk.farmereats.ui.screens.login
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,12 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mk.farmereats.R
 import com.mk.farmereats.ui.components.SocialButton
 import com.mk.farmereats.ui.theme.orangeColor
@@ -41,23 +46,34 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun LoginScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
     onLoginClick: () -> Unit = {},
     onCreateAccountClick: () -> Unit = {},
     onForgotClick: () -> Unit = {}
 ) {
 
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
 
-        var emailError by remember { mutableStateOf(false) }
-        var passwordError by remember { mutableStateOf(false) }
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
-        LaunchedEffect(emailError , passwordError) {
-            delay(2000)
-            emailError = false
-            passwordError = false
+    var emailError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+
+    LaunchedEffect(emailError, passwordError) {
+        delay(2000)
+        emailError = false
+        passwordError = false
+    }
+
+
+    LaunchedEffect(state.value.isSuccess) {
+        if (state.value.isSuccess) {
+            onLoginClick()
         }
+    }
 
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
 
         Column(
             modifier = Modifier
@@ -105,8 +121,8 @@ fun LoginScreen(
             OutlinedTextField(
                 isError = emailError,
                 singleLine = true,
-                value = email,
-                onValueChange = { email = it },
+                value = state.value.form.email,
+                onValueChange = { viewModel.updateForm(state.value.form.copy(email = it)) },
                 placeholder = { Text("Email Address", color = Color.Gray) },
                 leadingIcon = {
                     Icon(
@@ -131,13 +147,14 @@ fun LoginScreen(
 
             OutlinedTextField(
                 isError = passwordError,
-                value = password,
+                value = state.value.form.password,
                 singleLine = true,
-                onValueChange = { password = it },
+                onValueChange = { viewModel.updateForm(state.value.form.copy(password = it)) },
                 placeholder = { Text("Password", color = Color.Gray) },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(R.drawable.password_icon), contentDescription = null,
+                        painter = painterResource(R.drawable.password_icon),
+                        contentDescription = null,
                         modifier = Modifier.size(20.dp)
                     )
                 },
@@ -168,12 +185,14 @@ fun LoginScreen(
             Button(
                 onClick = {
 
-                    emailError = email.isEmpty()
-                    passwordError = password.isEmpty()
+                    with(state.value.form) {
+                        emailError = email.isEmpty()
+                        passwordError = password.isEmpty()
+                    }
 
                     val hasError = emailError || passwordError
 
-                    if (!hasError) onLoginClick()
+                    if (!hasError) viewModel.login()
 
                 },
                 shape = RoundedCornerShape(50),
@@ -209,6 +228,42 @@ fun LoginScreen(
             }
 
         }
+
+        //        progress Loading
+        if (state.value.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                androidx.compose.material3.CircularProgressIndicator(
+                    color = orangeColor
+                )
+            }
+        }
+
+//        error message dialog
+        if (state.value.error != null) {
+            AlertDialog(
+                onDismissRequest = { viewModel.clearError() },
+                confirmButton = {
+                    TextButton(
+                        onClick = { viewModel.clearError() }
+                    ) {
+                        Text("OK")
+                    }
+                },
+                title = {
+                    Text("Error")
+                },
+                text = {
+                    Text(state.value.error!!)
+                }
+            )
+        }
+
+    }
 
 }
 
