@@ -47,6 +47,11 @@ fun AppNavHost(isLoggedIn: Boolean){
                     navController.navigate("login"){
                         popUpTo("register") { inclusive = true }
                     }
+                },
+                onSubmit = {
+                    navController.navigate("registerCompleted"){
+                        popUpTo("register") { inclusive = true }
+                    }
                 }
             )
         }

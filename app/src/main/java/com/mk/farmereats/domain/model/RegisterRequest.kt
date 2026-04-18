@@ -2,7 +2,6 @@ package com.mk.farmereats.domain.model
 
 import android.content.Context
 import android.net.Uri
-import com.mk.farmereats.data.remote.dto.RegisterRequestDto
 import com.mk.farmereats.ui.screens.register.getFileName
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -26,7 +25,7 @@ data class RegisterRequest(
     val registrationProof: Uri? = null,
     val businessHours: BusinessHours = BusinessHours(),
     val deviceToken: String = "",
-    val type: String = "",
+    val type: String = "email",
     val socialId: String = ""
 ){
     data class BusinessHours(

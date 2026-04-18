@@ -3,6 +3,7 @@ package com.mk.farmereats.ui.screens.register
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,12 +19,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,12 +37,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mk.farmereats.R
 import com.mk.farmereats.domain.model.RegisterRequest
 import com.mk.farmereats.ui.components.SocialButton
@@ -49,79 +56,131 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun RegisterScreen(
+    viewModel: RegisterViewModel = hiltViewModel(),
     goBackToLogin: () -> Unit = {},
     onSubmit: () -> Unit = {}
 ) {
 
     var currentStep by remember { mutableIntStateOf(1) }
 
-    var  registerObjState by remember { mutableStateOf(RegisterRequest() ) }
+    val context  = LocalContext.current
 
+//    var  registerObjState by remember { mutableStateOf(RegisterRequest() ) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
-            .padding(horizontal = 24.dp)
-            .statusBarsPadding(),
+    val uiState  = viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState.value.isSuccess) {
+        if (uiState.value.isSuccess){
+            onSubmit()
+        }
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
 
-        Text(
-            text = "FarmerEats",
-            fontSize = 18.sp,
-            color = Color.Black
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF5F5F5))
+                .padding(horizontal = 24.dp)
+                .statusBarsPadding(),
+        ) {
+            Spacer(modifier = Modifier.height(20.dp))
 
-        Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = "FarmerEats",
+                fontSize = 18.sp,
+                color = Color.Black
+            )
 
-        Text(
-            text = "Signup $currentStep of 4",
-            color = Color.Gray,
-            fontSize = 14.sp
-        )
+            Spacer(modifier = Modifier.height(10.dp))
 
-        Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = "Signup $currentStep of 4",
+                color = Color.Gray,
+                fontSize = 14.sp
+            )
 
-        when(currentStep){
-            1 -> {
-                StepOneScreen(
-                    registerState = registerObjState,
-                    goBackToLogin = goBackToLogin ,
-                    onContinue = { currentStep++ },
-                    onValueChange = {registerObjState = it}
-                )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            when (currentStep) {
+                1 -> {
+                    StepOneScreen(
+                        registerState = uiState.value.form,
+                        goBackToLogin = goBackToLogin,
+                        onContinue = { currentStep++ },
+                        onValueChange = { viewModel.updateForm(it) }
+                    )
+                }
+
+                2 -> {
+                    StepTwoScreen(
+                        registerState = uiState.value.form,
+                        goBack = { currentStep-- },
+                        onContinue = { currentStep++ },
+                        onValueChange = { viewModel.updateForm(it) }
+                    )
+                }
+
+                3 -> {
+                    StepThreeScreen(
+                        registerState = uiState.value.form,
+                        goBack = { currentStep-- },
+                        onContinue = { currentStep++ },
+                        onValueChange = { viewModel.updateForm(it) }
+                    )
+                }
+
+                4 -> {
+                    StepFourScreen(
+                        registerState = uiState.value.form,
+                        goBack = { currentStep-- },
+                        onSubmit = {
+                            viewModel.register(context,uiState.value.form)
+                        },
+                        onValueChange = { viewModel.updateForm(it) }
+                    )
+                }
             }
-            2 -> {
-                StepTwoScreen(
-                    registerState = registerObjState,
-                    goBack = { currentStep-- } ,
-                    onContinue = { currentStep++ },
-                    onValueChange = {registerObjState = it}
-                )
-            }
-            3 -> {
-                StepThreeScreen(
-                    registerState = registerObjState,
-                    goBack = { currentStep-- } ,
-                    onContinue = { currentStep++ },
-                    onValueChange = {registerObjState = it}
-                )
-            }
-            4 -> {
-                StepFourScreen(
-                    registerState = registerObjState,
-                    goBack = { currentStep-- } ,
-                    onSubmit = {  },
-                    onValueChange = {registerObjState = it}
+
+            Spacer(modifier = Modifier.height(17.dp))
+
+        }
+
+//        progress Loading
+        if (uiState.value.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                androidx.compose.material3.CircularProgressIndicator(
+                    color = orangeColor
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(17.dp))
-
-
-
+//        error message dialog
+        if (uiState.value.error != null) {
+            AlertDialog(
+                onDismissRequest = { viewModel.clearError() },
+                confirmButton = {
+                    TextButton(
+                        onClick = { viewModel.clearError() }
+                    ) {
+                        Text("OK")
+                    }
+                },
+                title = {
+                    Text("Error")
+                },
+                text = {
+                    Text(uiState.value.error!!)
+                }
+            )
+        }
 
     }
 
@@ -130,7 +189,7 @@ fun RegisterScreen(
 @Preview(showSystemUi = true , showBackground = true)
 @Composable
 fun RegisterScreenPreview(){
-    RegisterScreen({},{})
+    RegisterScreen(viewModel() , { },{})
 }
 
 

@@ -27,13 +27,16 @@ class RegisterViewModel @Inject constructor(
     fun updateForm(newForm: RegisterRequest) {
         _state.update { it.copy(form = newForm) }
     }
+    fun clearError() {
+        _state.value = _state.value.copy(error = null)
+    }
 
     fun register(context: Context, request: RegisterRequest) {
         viewModelScope.launch {
 
             _state.update { it.copy(isLoading = true, error = null) }
 
-            val result = authRepository.register(context, request)
+            val result = authRepository.register(context, _state.value.form)
 
             _state.update {
                 if (result.isSuccess) {

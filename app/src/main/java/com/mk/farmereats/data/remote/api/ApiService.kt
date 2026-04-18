@@ -13,7 +13,7 @@ import retrofit2.http.PartMap
 interface ApiService {
 
     @Multipart
-    @POST("register")
+    @POST("user/register")
     suspend fun registerUser(
         @PartMap data: Map<String, @JvmSuppressWildcards RequestBody>,
         @Part registrationProof: MultipartBody.Part?

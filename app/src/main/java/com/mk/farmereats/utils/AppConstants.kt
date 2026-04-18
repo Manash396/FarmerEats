@@ -48,5 +48,5 @@ object AppConstants {
         "7:00pm - 10:00pm"
     )
 
-    const val BASE_URL = "sowlab.com/assignment/"
+    const val BASE_URL = "https://sowlab.com/assignment/"
 }
